@@ -207,6 +207,34 @@ Matrix Matrix::solve(Matrix A, Matrix b)
     return x;
 }
 
+void Matrix::fill_from_vec(std::vector<double> vd){
+    Matrix& R(*this);
+    if (R.size() == vd.size()){
+        for(int i = 0; i < R.row(); ++i){
+            for(int j = 0; j < R.col(); ++j){
+                R(i, j) = vd[i * R.row() + j];
+            }
+        }
+    }
+    else{
+        throw "Wrong size!";
+    }
+}
+
+
+void Matrix::fill_with_random(double l, double u){
+    Matrix& R(*this);
+    if(l < u){
+        Rand_double rd{l, u};
+        for(int i = 0; i < R.row(); ++i){
+            R(i, 0) = rd();
+            for(int j = 1; j < R.col(); ++j){
+                R(i, j) = rd();
+            }
+        }
+    }
+}
+
 Matrix Matrix::bandSolve(Matrix A, Matrix b, int k)
 {
     // optimized Gaussian elimination
@@ -519,11 +547,11 @@ Matrix operator/(const Matrix& m, double num)
 ostream& operator<<(ostream& os, const Matrix& m)
 {
     for (int i = 0; i < m.rows_; ++i) {
-        os << m.p[i][0];
+        os << '[' << std::setw(5) << m.p[i][0];
         for (int j = 1; j < m.cols_; ++j) {
-            os << " " << m.p[i][j];
+            os << " " << std::setw(5) << m.p[i][j];
         }
-        os << endl;
+        os << ']' << endl;
     }
     return os;
 }

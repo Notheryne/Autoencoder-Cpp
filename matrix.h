@@ -5,7 +5,12 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
+
 #include <iostream>
+#include <iomanip>
+#include <vector>
+#include <random>
+#include "random_double.h"
 
 class Matrix {
     public:
@@ -15,8 +20,8 @@ class Matrix {
         Matrix(const Matrix&);
         Matrix& operator=(const Matrix&);
 
+        // operators
         inline double& operator()(int x, int y) { return p[x][y]; }
-
         Matrix& operator+=(const Matrix&);
         Matrix& operator-=(const Matrix&);
         Matrix& operator*=(const Matrix&);
@@ -27,7 +32,12 @@ class Matrix {
         friend std::ostream& operator<<(std::ostream&, const Matrix&);
         friend std::istream& operator>>(std::istream&, Matrix&);
 
+        // filling with numbers
 
+        void fill_from_vec(std::vector<double>);
+        void fill_with_random(double, double);
+
+        // functions on matrices
         void swapRows(int, int);
         Matrix transpose();
 
