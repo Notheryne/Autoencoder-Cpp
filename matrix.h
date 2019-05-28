@@ -36,6 +36,8 @@ class Matrix {
 
         void fill_from_vec(std::vector<double>);
         void fill_with_random(double, double);
+        void fill_vec(std::vector<double>&);
+
 
         // functions on matrices
         void swapRows(int, int);

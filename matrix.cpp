@@ -235,6 +235,15 @@ void Matrix::fill_with_random(double l, double u){
     }
 }
 
+void Matrix::fill_vec(std::vector<double>& vd){
+    Matrix& R(*this);
+    for(int i = 0; i < R.row(); ++i){
+        for(int j = 0; j < R.col(); ++j){
+            vd.push_back(R(i, j));
+        }
+    }
+}
+    
 Matrix Matrix::bandSolve(Matrix A, Matrix b, int k)
 {
     // optimized Gaussian elimination
