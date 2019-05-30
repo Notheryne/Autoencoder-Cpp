@@ -10,6 +10,18 @@
 using std::ostream;  using std::istream;  using std::endl;
 using std::domain_error;
 
+void printvec(std::vector<double> vd){
+    for(int i = 0; i < vd.size(); ++i){
+        std::cout << vd[i] << endl;
+    }
+}
+
+void printvecmat(std::vector<Matrix> vm){
+    for(int i = 0; i < vm.size(); ++i){
+        std::cout << vm[i] << endl;
+    }
+}
+
 /* PUBLIC MEMBER FUNCTIONS
  ********************************/
 
@@ -210,10 +222,10 @@ Matrix Matrix::solve(Matrix A, Matrix b)
 void Matrix::fill_from_vec(std::vector<double> vd){
     Matrix& R(*this);
     if (R.size() == vd.size()){
-        for(int i = 0; i < R.row(); ++i){
-            for(int j = 0; j < R.col(); ++j){
-                R(i, j) = vd[i * R.row() + j];
-            }
+        for(int i = 0; i < vd.size(); ++i){
+            int x = i % R.col();
+            int y = i / R.col();
+            R(y, x) = vd[i];
         }
     }
     else{
@@ -243,7 +255,19 @@ void Matrix::fill_vec(std::vector<double>& vd){
         }
     }
 }
-    
+
+
+void Matrix::apply(double (*func)(double)){
+    Matrix& R(*this);
+    for(int i = 0; i < R.row(); ++i){
+        for(int j = 0; j < R.col(); ++j){
+            R(i, j) = func(R(i, j));
+        }
+    }
+}
+
+
+
 Matrix Matrix::bandSolve(Matrix A, Matrix b, int k)
 {
     // optimized Gaussian elimination

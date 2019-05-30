@@ -47,3 +47,33 @@ void NeuralNetwork::inf(bool show_weights){
     }
 }
 
+
+vector<double> NeuralNetwork::predict(vector<double> inputs){
+    NeuralNetwork self(*this);
+
+    if(self.bias == true){
+        inputs.push_back( 1.0 );
+    }
+    if( self.neurons()[0] == inputs.size() ){
+        vector<Matrix> outputs;
+        
+        Matrix A ( inputs.size() , 1 );
+
+        A.fill_from_vec(inputs);
+
+        outputs.push_back(A);
+        
+        for(int i = 1; i < self.weights.size() + 1; ++i){
+            Matrix X ( self.neurons()[i], 1 );
+          
+            X = self.weights[i-1] * outputs[i-1];
+            X.apply(expit);
+            outputs.push_back(X);
+        }
+        printvecmat(outputs);
+        
+    }
+    else{
+        throw "Wrong input dimension!";
+    }
+}

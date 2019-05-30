@@ -56,7 +56,9 @@ class Matrix {
         Matrix rowReduceFromGaussian();
         void readSolutionsFromRREF(std::ostream& os);
         Matrix inverse();
-        int size() { return rows_ * cols_;}
+
+        void apply(double (*func)(double));
+        int size() { return rows_ * cols_; }
         int row() { return rows_; }
         int col() { return cols_; }
     private:
