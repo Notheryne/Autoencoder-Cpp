@@ -31,7 +31,6 @@ NeuralNetwork::NeuralNetwork(vector<int> nodes_, double rate_, bool bias_)
     }
         
 
-
 void NeuralNetwork::inf(bool show_weights){
     NeuralNetwork nn(*this);
     cout << "Neurons: ";
@@ -47,3 +46,16 @@ void NeuralNetwork::inf(bool show_weights){
     }
 }
 
+vector<double> NeuralNetwork::predict(vector<double> inputs){
+    NeuralNetwork self(*this);
+
+    if(self.bias == true){
+        inputs.push_back( 1.0 );
+    }
+    if( self.neurons()[0] == inputs.size() ){
+        cout << "ok";
+    }
+    else{
+        throw "Wrong input dimension!";
+    }
+}

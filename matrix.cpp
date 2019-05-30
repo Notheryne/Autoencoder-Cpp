@@ -556,9 +556,9 @@ Matrix operator/(const Matrix& m, double num)
 ostream& operator<<(ostream& os, const Matrix& m)
 {
     for (int i = 0; i < m.rows_; ++i) {
-        os << '[' << std::setw(5) << m.p[i][0];
+        os << '[' << std::setw(10) << m.p[i][0];
         for (int j = 1; j < m.cols_; ++j) {
-            os << " " << std::setw(5) << m.p[i][j];
+            os << " " << std::setw(10) << m.p[i][j];
         }
         os << ']' << endl;
     }
