@@ -1,29 +1,15 @@
-#include "matrix.cpp"
-#include "neuralnetwork.cpp"
+#include "NeuralNetwork.cpp"
 
-using namespace std;
+int main(){
+    vector<int> nodes = { 4, 2, 3, 4 };
+    vector<double> inputs = { 1.1, 2.2, 3.3, 4.4 };
+    NeuralNetwork nn( nodes, 0.3 );
+    NeuralNetwork nb( nodes, 0.3 , false );
+    MatrixXd A (3, 4);
+    A << 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
 
-double pow(double x){
-    return x*x;
+    nn.predict(inputs);
+    nn.predict(inputs);
+    cout << endl;
+    return 0;
 }
-
-int main()
-{
-    try{
-        //vector<int> neurons = {784, 100, 100, 10};
-        vector<int> neurons = {4,2, 3, 4};
-        NeuralNetwork nn (neurons, 0.3);
-        NeuralNetwork nb (neurons, 0.5, false);
-        vector<double> inputs = {1.1, 2.2, 3.3, 4.4};
- 
-        vector<double> test = { 1., 2., 3., 4. };
-        nn.inf(false);
-        nn.predict(inputs);
-
-        cout << endl;
-        return 0;
-        }
-    catch(char const* msg){
-        cerr << msg << endl;
-    }
-}  
