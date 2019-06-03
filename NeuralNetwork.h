@@ -1,23 +1,22 @@
-
-#include "matrix.h"
+#include "small_utils.h"
 
 class NeuralNetwork{
 public:
-    NeuralNetwork(std::vector<int>, double);
-    NeuralNetwork(std::vector<int>, double, bool);
+    NeuralNetwork(vector<int>, double);
+    NeuralNetwork(vector<int>, double, bool);
     ~NeuralNetwork() { };
 
-    std::vector<int> neurons() { return nodes; }
-    std::vector<Matrix> weight() { return weights; }
-    double rates() { return rate; }
     void inf(bool);
-
-    std::vector<double> predict (std::vector<double>);
-    bool bias = true;
-
+    vector<MatrixXd> show_errors() { return errors; };
+    vector<MatrixXd> predict(vector<double>);
+    void train(vector<double>, vector<double>);
+    void save_weights(string);
+    void load_weights(string);
+    void mess_weights();
 private:
-    std::vector<int> nodes;
-    double rate; 
-    std::vector<Matrix> weights;
-    double activation_function;
+    vector<int> neurons;
+    double rate;
+    vector<MatrixXd> weights;
+    bool bias;
+    vector<MatrixXd> errors;
 };
