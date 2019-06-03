@@ -3,6 +3,7 @@
 #include <eigen3/Eigen/Dense>
 #include <vector>
 #include <fstream>
+
 using namespace std;
 using namespace Eigen;
 
@@ -38,10 +39,24 @@ void fill(MatrixXd& A, vector<double> vd){
             int y = i / A.cols();
             A( y, x ) = vd[i];
         }
-    }else{
+    } else {
         throw "Wrong size!";
     }
 }
+
+void reversefill(MatrixXd A, vector<double>& vd){
+    for(int i = 0; i < A.rows(); ++i){
+        for(int j = 0; j < A.cols(); ++j){
+            vd.push_back(A(i,j));
+        }
+    }
+}
+double sminmat(double x){
+    return 1.0 - x;
+}
+
+
+
 
 int ReverseInt(int i)
 {
@@ -52,10 +67,12 @@ int ReverseInt(int i)
     ch4 = (i >> 24) & 255;
     return ((int)ch1 << 24) + ((int)ch2 << 16) + ((int)ch3 << 8) + ch4;
 }
+
+
 void ReadMNIST(int NumberOfImages, int DataOfAnImage, vector<vector<double>> &arr)
 {
     arr.resize(NumberOfImages, vector<double>(DataOfAnImage));
-    ifstream file("./t10k-images.idx3-ubyte", ios::binary);
+    ifstream file("/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-images-idx3-ubyte", ios::binary);
     if (file.is_open())
     {
         int magic_number = 0;
@@ -82,9 +99,12 @@ void ReadMNIST(int NumberOfImages, int DataOfAnImage, vector<vector<double>> &ar
                 }
             }
         }
+    } else {
+        throw "Wrong filepath.";
     }
 }
-void create_img(vector<double> vec, int width, int height)
+
+void create_img(vector<double> vec, int width, int height, string filename)
 {
     if (vec.size() != width * height)
     {
@@ -92,7 +112,7 @@ void create_img(vector<double> vec, int width, int height)
     }
     else
     {
-        ofstream img("picture.ppm");
+        ofstream img(filename);
         img << "P3" << endl;
         img << width << " " << height << endl;
         img << "255" << endl;
@@ -107,5 +127,19 @@ void create_img(vector<double> vec, int width, int height)
                 img << r << " " << g << " " << b << endl;
             }
         }
+    }
+}
+
+void normalize(double max, vector<double>& vd)
+{
+    for(int i = 0; i < vd.size(); ++i){
+        vd[i] = vd[i] / max;
+    }
+}
+
+void rnormalize(double max, vector<double>& vd)
+{
+    for(int i = 0; i < vd.size(); ++i){
+        vd[i] *= max;
     }
 }
