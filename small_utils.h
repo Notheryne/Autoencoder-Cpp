@@ -72,7 +72,7 @@ int ReverseInt(int i)
 void ReadMNIST(int NumberOfImages, int DataOfAnImage, vector<vector<double>> &arr)
 {
     arr.resize(NumberOfImages, vector<double>(DataOfAnImage));
-    ifstream file("/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-images-idx3-ubyte", ios::binary);
+    ifstream file("/home/avienir/Programowanie/Autoencoder-Cpp/t10k-images-idx3-ubyte", ios::binary);
     if (file.is_open())
     {
         int magic_number = 0;
@@ -142,4 +142,19 @@ void rnormalize(double max, vector<double>& vd)
     for(int i = 0; i < vd.size(); ++i){
         vd[i] *= max;
     }
+}
+
+vector<double> one_hot(double l, int max){
+    vector<double> table;
+    for(int i=0;i<max;i++){
+        if(l==(double)i){
+            table.push_back(1.0);
+        }
+        else{
+            table.push_back(0.0);
+        }
+        
+    }
+    return table;
+
 }
