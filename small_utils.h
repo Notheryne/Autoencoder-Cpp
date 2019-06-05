@@ -158,3 +158,22 @@ vector<double> one_hot(double l, int max){
     return table;
 
 }
+
+void result(vector <MatrixXd> vm){
+    double max = 0;
+    int index = 0;
+    MatrixXd X = vm[ vm.size() - 1 ];
+
+    for(int i=0; i < X.rows(); ++i)
+    {
+        for(int j = 0; j < X.cols(); ++j){
+            if (X(i,j) > max) 
+            {
+            max = X(i,j);
+            index = i; 
+            }
+        }
+
+    }
+    cout << endl << "Wynik: " << index << ", z prawdopobieństwem: " << max << '.' << endl;
+}

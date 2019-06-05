@@ -34,8 +34,7 @@ try
             ola.train( images[i], l );
         }
     }
-    vector<MatrixXd> X = ola.predict(images[ images.size() - 1 ]);
-    cout << X[ X.size() - 1] << endl;
+    result(ola.predict(images[ images.size() - 1 ]));
     //ola.save_weights("first_epoch_labels.txt"); */
     /*
     NeuralNetwork ola (nodes, 0.1);
