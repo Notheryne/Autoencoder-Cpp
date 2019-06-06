@@ -1,28 +1,23 @@
 #include "NeuralNetwork.cpp"
 #include <typeinfo>
-#include <cxxabi.h>
-#include <stdlib.h>
+
 int main(){
 try
 {    
-    int x = 10000;
-    vector<vector<double>> images;
-    ReadMNIST(x, 784, images);
-    //int test = 9234;
-    create_img(images[ images.size() - 1 ], 28, 28, "zdj/ostatnie.pmm");
-    vector<int> nodes = { 784, 512, 256, 10 };
-   
-    //auto dataset = read_mnist_labels("/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-labels-idx1-ubyte", x);
-    auto dataset = read_mnist_labels("/home/avienir/Programowanie/Autoencoder-Cpp/t10k-labels-idx1-ubyte", x);
-    vector<double> labels(dataset.begin(), dataset.end());
-    //print_dou(labels);
+    int datasize = 10000;
 
-    NeuralNetwork ola(nodes, 0.1);
-    //normalize(255, labels);
-    //ola.load_weights("first_epoch_labels.txt");
-    //vector<MatrixXd> X = ola.predict(images[1000]);
-    create_img(images[1000], 28, 28, "1000.pmm");
-    //print_mat(X);
+    string datapath = "/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-images-idx3-ubyte";
+    string labelspath = "/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-labels-idx1-ubyte";
+
+
+    auto images = ReadMNIST(datasize, datapath);
+    auto ilabels = ReadMNIST_labels(datasize, labelspath);
+    vector<double> labels(ilabels.begin(), ilabels.end());
+    normalize(255, labels);
+
+    vector<int> nodes = { 784, 512, 256, 10 };
+    double learning_rate = 0.1;
+    NeuralNetwork ola(nodes, learning_rate);
 
     for (int epoch = 0; epoch < 1; ++epoch){
         for(int i = 0; i < images.size() - 9000; ++i){
@@ -62,7 +57,7 @@ try
 
     vector<double> res;
     reversefill(X[ X.size() - 1 ], res);
-    rnormalize( 255, res );
+    reverse_normalize( 255, res );
 
     cout << endl;
     print_dou(res);

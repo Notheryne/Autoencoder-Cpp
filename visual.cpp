@@ -9,10 +9,6 @@
 
 using namespace std;
 
-
-
-
-
 void center_text(string s){
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
@@ -74,8 +70,8 @@ int main(){
         cout<<"\e[1;4m";
         center_text("Input path to mnist file:");
         cout<<"\e[0m";
-        string s;
-        cin>>s;
+        string s2;
+        cin>>s2;
         cout<<s;
         char c;
         cin>>c;
