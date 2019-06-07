@@ -9,61 +9,45 @@ try
     string datapath = "/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-images-idx3-ubyte";
     string labelspath = "/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/t10k-labels-idx1-ubyte";
 
-
     auto images = ReadMNIST(datasize, datapath);
-    auto ilabels = ReadMNIST_labels(datasize, labelspath);
-    vector<double> labels(ilabels.begin(), ilabels.end());
-    normalize(255, labels);
+    auto labels = ReadMNIST_labels(datasize, labelspath);
 
     vector<int> nodes = { 784, 512, 256, 10 };
     double learning_rate = 0.1;
     NeuralNetwork ola(nodes, learning_rate);
-
-    for (int epoch = 0; epoch < 1; ++epoch){
-        for(int i = 0; i < images.size() - 9000; ++i){
-            if (i% 100 == 0 ) { 
-             cout << "Epoch: " << epoch << " iter: " << i << endl; }
-           
-            normalize(255, images[i]);
-            vector<double> l = one_hot( labels[i], 10 );
-            ola.train( images[i], l );
-        }
-    }
-    result(ola.predict(images[ images.size() - 1 ]));
-    //ola.save_weights("first_epoch_labels.txt"); */
+    ola.load_weights("mnist_weights.txt");
     /*
-    NeuralNetwork ola (nodes, 0.1);
-    cout << " JEDEN " << endl;
-    ola.inf(true);
-    ola.save_weights("weights.txt");
-    ola.mess_weights();
-    cout <<" DWA " << endl;
-    ola.inf(true);
-    ola.load_weights("weights.txt");
-    cout <<" TRZY " << endl;
-    ola.inf(true);
-    */
-    /*
-    for(int i = 0; i < 10000; ++i)
+    for(int i = 0; i < images.size() - 1000; ++i)
     {
-        if (i%1000 == 0) { cout << i << endl; }
+        if( i % 100 == 0) {cout << i << endl; }
         normalize(255, images[i]);
-        ola.train( images[i] , images[i] );
+        vector<double> l = one_hot( labels[i] , 10 );
+        ola.train( images[i], l );
     }
+
+    ola.save_weights("mnist_weights.txt");
     
-    //ola.inf(true);
+    cout << "1000: " << labels[1000] << " 1500:" << labels[1500] << endl;
+    ola.load_weights("mnist_weights.txt");
+    cout << "1000:" << endl;
+    result(ola.predict(images[1000]), true);
+    create_img(images[1000], 28, 28, "1000(2).pmm");
+    vector<MatrixXd> X = ola.predict(images[1200]);
+    cout << X[ X.size() - 1 ] << endl << endl;
 
-    vector<MatrixXd> X = ola.predict( images[ images.size() - 1 ]);
-
-    vector<double> res;
-    reversefill(X[ X.size() - 1 ], res);
-    reverse_normalize( 255, res );
-
-    cout << endl;
-    print_dou(res);
-    create_img(res, 28, 28, "zdj/ola.pmm");
+    cout << "1500:" << endl;
+    result(ola.predict(images[1500]), true);
+    create_img(images[1500], 28, 28, "1500.pmm");
+    vector<MatrixXd> Y = ola.predict(images[1500]);
+    cout << Y[ Y.size() - 1 ] << endl << endl;
     */
+    vector<vector<double>> testset(images.begin() + 9000, images.end());
+    vector<double> testlab(labels.begin() + 9000, labels.end());
+    cout << testset[10][0];
+    
 
+    double acc = ola.calc_acc(testset, testlab);
+    cout << acc;
 
     return 0;
 }

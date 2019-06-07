@@ -20,6 +20,7 @@ public:
     //main functions
     void train(vector<double>, vector<double>);
     vector<MatrixXd> predict(vector<double>);
+    double calc_acc(vector<vector<double>>, vector<double>);
 private:
     vector<int> neurons; // number of neurons on each layer, first should match input size, last should match output size
     double rate; //learning rate of the network

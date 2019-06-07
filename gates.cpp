@@ -37,7 +37,7 @@ and, xor, or, nor, xnor, nand
         else if (gatename == "nand") { add_vecs(gate, one, one, one, zero); }
         else
         {
-            throw "No such gate!";
+            throw "[gateway_train] No such gate!";
         }
 
         for(int step = 0; step < steps_per_epoch; ++step){

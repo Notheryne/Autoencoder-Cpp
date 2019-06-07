@@ -67,7 +67,6 @@ int ReverseInt(int i)
     return ((int)ch1 << 24) + ((int)ch2 << 16) + ((int)ch3 << 8) + ch4;
 }
 
-
 vector<vector<double>> ReadMNIST(int NumberOfImages, string filepath)
 /*
 Function used to read mnist data
@@ -110,7 +109,7 @@ filepath - a path to mnist data, probably "... /train-images-idx3-ubyte"
     }
 }
 
-vector<int> ReadMNIST_labels(int NumberOfLabels, string filepath)
+vector<double> ReadMNIST_labels(int NumberOfLabels, string filepath)
 /*
 Function used to read mnist labels
 NumberOfLabels - size of dataset
@@ -132,12 +131,12 @@ filepath - a path to mnist labels, probably "... /train-labels-idx3-ubyte"
         for(int i = 0; i < NumberOfLabels; i++) {
             file.read((char*) &dataset[i], 1);        }
     
-    return dataset;
+    vector<double> data(dataset.begin(), dataset.end());
+    return data;
     } else {
         throw "[ReadMNIST_labels] Unable to open file.";
     }
 }
-
 
 void create_img(vector<double> vec, int width, int height, string filepath)
 /*
@@ -216,7 +215,7 @@ for example one_hot(2, 5) would return vector<double> {0.0, 0.0, 1.0, 0.0, 0.0}
     return tokens;
 }
 
-void result(vector <MatrixXd> vm)
+int result(vector <MatrixXd> vm, bool verbose)
 /*
 A simple function showing the result of prediction.
 vm - a vector of matrices, should be returned by NeuralNetwork.train() method, shows the prediction and probability of it.
@@ -235,7 +234,11 @@ vm - a vector of matrices, should be returned by NeuralNetwork.train() method, s
             index = i; 
             }
         }
-
     }
-    cout << endl << "Wynik: " << index << ", z prawdopobieństwem: " << max * 100 << "%." << endl;
+    if(verbose) {
+        cout << endl << "Wynik: " << index << ", z prawdopobieństwem: " << max * 100 << "%." << endl;
+        return index;
+    } else {
+        return index;
+    }
 }

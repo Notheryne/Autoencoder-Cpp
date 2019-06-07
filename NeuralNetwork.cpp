@@ -199,3 +199,21 @@ A helper function to initialize weights again, just for testing.
     weights.push_back(weight);
     }
 }
+
+double NeuralNetwork::calc_acc(vector<vector<double>> inputs, vector<double> targets)
+{
+    int good_labels = 0;
+    int bad_labels = 0;
+    if(inputs.size() == targets.size()){
+        for(int i = 0; i < inputs.size(); ++i)
+        {
+            int answer = result(predict(inputs[i]), false);
+            if (answer == (int) targets[i]) { good_labels += 1; }
+            else { bad_labels += 1; }
+        }
+        double accuracy = (double) good_labels / (double) inputs.size();
+        return accuracy;
+    } else {
+        throw "[calc_acc] Bad sizes!";
+    }
+}
