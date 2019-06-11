@@ -7,34 +7,32 @@
 using namespace std;
 using namespace Eigen;
 
-//simple functions to print vectors of ints/doubles/matrices
-void print_int(vector<int> vi)
-{
+void print_int(vector<int> vi){
     for(int i = 0; i < vi.size(); ++i){
         cout << vi[i] << ", ";
     }
     cout << endl;
 }
 
-void print_dou(vector<double> vd)
-{
+void print_dou(vector<double> vd){
     for(int i = 0; i < vd.size(); ++i){
         cout << vd[i] << ", ";
     }
     cout << endl;
 }
 
-void print_mat(vector<MatrixXd> vm)
-{
+void print_mat(vector<MatrixXd> vm){
     for(int i = 0; i < vm.size(); ++i){
         cout << vm[i] << endl << endl;
     }
     cout << endl;
 }
 
-void fill(MatrixXd& A, vector<double> vd)
-//helper function to fill a MatrixXd with elements of vector<double>
-{
+double expit(double num){
+    return 1 / (1 + exp(-1.0 * num));
+}
+
+void fill(MatrixXd& A, vector<double> vd){
     if(A.size() == vd.size()){
         for(int i = 0; i < vd.size(); ++i){
             int x = i % A.cols();
@@ -42,22 +40,25 @@ void fill(MatrixXd& A, vector<double> vd)
             A( y, x ) = vd[i];
         }
     } else {
-        throw "[fill] Wrong size!";
+        throw "Wrong size!";
     }
 }
 
-void reversefill(MatrixXd A, vector<double>& vd)
-//helper function to fill a vector<double> with elements of MatrixXd
-{
+void reversefill(MatrixXd A, vector<double>& vd){
     for(int i = 0; i < A.rows(); ++i){
         for(int j = 0; j < A.cols(); ++j){
             vd.push_back(A(i,j));
         }
     }
 }
+double sminmat(double x){
+    return 1.0 - x;
+}
+
+
+
 
 int ReverseInt(int i)
-//A helper function used in reading mnist data
 {
     unsigned char ch1, ch2, ch3, ch4;
     ch1 = i & 255;
@@ -67,16 +68,11 @@ int ReverseInt(int i)
     return ((int)ch1 << 24) + ((int)ch2 << 16) + ((int)ch3 << 8) + ch4;
 }
 
-vector<vector<double>> ReadMNIST(int NumberOfImages, string filepath)
-/*
-Function used to read mnist data
-NumberOfImages - size of dataset
-filepath - a path to mnist data, probably "... /train-images-idx3-ubyte"
-*/
+
+void ReadMNIST(int NumberOfImages, int DataOfAnImage, vector<vector<double>> &arr)
 {
-    vector<vector<double>> arr;
-    arr.resize(NumberOfImages, vector<double>(784));
-    ifstream file(filepath, ios::binary);
+    arr.resize(NumberOfImages, vector<double>(DataOfAnImage));
+    ifstream file("/home/avienir/Programowanie/Autoencoder-Cpp/t10k-images-idx3-ubyte", ios::binary);
     if (file.is_open())
     {
         int magic_number = 0;
@@ -103,55 +99,20 @@ filepath - a path to mnist data, probably "... /train-images-idx3-ubyte"
                 }
             }
         }
-        return arr;
     } else {
-        throw "[ReadMNIST] Wrong filepath.";
+        throw "Wrong filepath.";
     }
 }
 
-vector<double> ReadMNIST_labels(int NumberOfLabels, string filepath)
-/*
-Function used to read mnist labels
-NumberOfLabels - size of dataset
-filepath - a path to mnist labels, probably "... /train-labels-idx3-ubyte"
-*/
-{
-    ifstream file(filepath, ios::binary);
-
-    if(file.is_open()){
-        int magic_number = 0;
-        file.read((char *) &magic_number , sizeof(magic_number));
-        magic_number = ReverseInt(magic_number);
-
-        if(magic_number != 2049) throw runtime_error("Invalid MNIST label file!");
-
-        file.read((char *)&NumberOfLabels, sizeof(NumberOfLabels)), NumberOfLabels = ReverseInt(NumberOfLabels);
-
-        vector<int> dataset (NumberOfLabels);
-        for(int i = 0; i < NumberOfLabels; i++) {
-            file.read((char*) &dataset[i], 1);        }
-    
-    vector<double> data(dataset.begin(), dataset.end());
-    return data;
-    } else {
-        throw "[ReadMNIST_labels] Unable to open file.";
-    }
-}
-
-void create_img(vector<double> vec, int width, int height, string filepath)
-/*
-A function to save image as a file.
-vec - vector with doubles corresponding to colors (0-255) of each pixel
-filepath - a path where the image should be stored (preferably "... /image_name.pmm")
-*/
+void create_img(vector<double> vec, int width, int height, string filename)
 {
     if (vec.size() != width * height)
     {
-        throw "[create_img] Bad vector size for image.";
+        cout << "bad vector size for image";
     }
     else
     {
-        ofstream img(filepath);
+        ofstream img(filename);
         img << "P3" << endl;
         img << width << " " << height << endl;
         img << "255" << endl;
@@ -170,57 +131,35 @@ filepath - a path where the image should be stored (preferably "... /image_name.
 }
 
 void normalize(double max, vector<double>& vd)
-/*
-A helper function used to convert values in vector<double> from any range into a range of [0-1].
-max - the biggest number that may be stored in vd (ex. 255 for mnist data)
-vd - vector that has to be normalized
-*/
 {
     for(int i = 0; i < vd.size(); ++i){
         vd[i] = vd[i] / max;
     }
 }
 
-void reverse_normalize(double max, vector<double>& vd)
-/*
-A helper function used to convert values in vector<double> from range [0-1] to [0-max]
-max - the biggest number that may be stored in vd
-vd - vector that has to be reverse normalized
-*/
+void rnormalize(double max, vector<double>& vd)
 {
     for(int i = 0; i < vd.size(); ++i){
         vd[i] *= max;
     }
 }
 
-vector<double> one_hot(int l, int max)
-/*
-A function tokenizing integers into vector of doubles.
-l - a hot number
-max - how many numbers are there in total
-for example one_hot(2, 5) would return vector<double> {0.0, 0.0, 1.0, 0.0, 0.0}
-*/
-{
-    if (l > max) { throw "[one_hot] Wrong input!"; }
-
-    vector<double> tokens;
-    for(int i = 0; i < max; i++){
-        if(l == (double) i){
-            tokens.push_back( 1.0 );
+vector<double> one_hot(double l, int max){
+    vector<double> table;
+    for(int i=0;i<max;i++){
+        if(l==(double)i){
+            table.push_back(1.0);
         }
         else{
-            tokens.push_back( 0.0 );
+            table.push_back(0.0);
         }
+        
     }
-    return tokens;
+    return table;
+
 }
 
-int result(vector <MatrixXd> vm, bool verbose)
-/*
-A simple function showing the result of prediction.
-vm - a vector of matrices, should be returned by NeuralNetwork.train() method, shows the prediction and probability of it.
-*/
-{
+void result(vector <MatrixXd> vm){
     double max = 0;
     int index = 0;
     MatrixXd X = vm[ vm.size() - 1 ];
@@ -234,11 +173,7 @@ vm - a vector of matrices, should be returned by NeuralNetwork.train() method, s
             index = i; 
             }
         }
+
     }
-    if(verbose) {
-        cout << endl << "Wynik: " << index << ", z prawdopobieństwem: " << max * 100 << "%." << endl;
-        return index;
-    } else {
-        return index;
-    }
+    cout << endl << "Wynik: " << index << ", z prawdopobieństwem: " << max << '.' << endl;
 }
