@@ -1,6 +1,4 @@
-#include "helpers/NeuralNetwork.hpp"
-
-//using namespace std;
+#include "headers/NeuralNetwork.hpp"
 
 string get_dir()
 /* get current working directory using macro defined in small_utils.hpp */{
@@ -383,13 +381,11 @@ void test_mnist_screen()
     }
 
     string mnist_path = datapaths["full_images"];
-    //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + end);
     cout << mnist_path << " succesfuly loaded!\n";
 
     string labels_path = datapaths["full_labels"];
-    //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + end);
     cout << labels_path << " succesfuly loaded!\n";
@@ -476,8 +472,8 @@ void test_gates_screen()
 {
     make_title();
     center_text("Implemented gates:");
-    center_text("and \t or \t xor");
-    center_text("nor \t xnor \t nand");
+    center_text("and      or      xor");
+    center_text("nor      xnor      nand");
     center_text("9. Back");
     center_text("0. Exit");
 
@@ -543,13 +539,11 @@ void test_custom_mnist_screen(NeuralNetwork nn)
     }
 
     string mnist_path = datapaths["full_images"];
-    //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + end);
     cout << mnist_path << " succesfuly loaded!\n";
 
     string labels_path = datapaths["full_labels"];
-    //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + end);
     cout << labels_path << " succesfuly loaded!\n";
@@ -651,13 +645,11 @@ void custom_train_mnist_screen2(NeuralNetwork nn)
     }
 
     string mnist_path = datapaths["full_images"];
-    //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + amount);
     cout << mnist_path << " succesfuly loaded!\n";
 
     string labels_path = datapaths["full_labels"];
-    //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + amount);
     cout << labels_path << " succesfuly loaded!\n";
@@ -690,13 +682,11 @@ void default_train_mnist_screen()
     }
 
     string mnist_path = datapaths["full_images"];
-    //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + amount);
     cout << mnist_path << " succesfuly loaded!\n";
 
     string labels_path = datapaths["full_labels"];
-    //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + amount);
     cout << labels_path << " succesfuly loaded!\n";

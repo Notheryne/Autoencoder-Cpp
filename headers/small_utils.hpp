@@ -11,7 +11,6 @@
 #include <map>
 #include <algorithm>
 #include <iterator>
-#include "eigen_boost_serialization.hpp"
 #include <dirent.h>
 
 
@@ -19,6 +18,7 @@
 #include <unistd.h>
 #define GetCurrentDir getcwd
 
+#include "eigen_boost_serialization.hpp"
 
 using namespace std;
 using namespace Eigen;
