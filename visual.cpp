@@ -1,9 +1,9 @@
-#include "helpers/NeuralNetwork.cpp"
-#include "helpers/gates.cpp"
+#include "helpers/NeuralNetwork.hpp"
 
 //using namespace std;
 
-string get_dir( void ) {
+string get_dir()
+/* get current working directory using macro defined in small_utils.hpp */{
   char buff[FILENAME_MAX];
   GetCurrentDir( buff, FILENAME_MAX );
   string current_working_dir(buff);
@@ -11,6 +11,9 @@ string get_dir( void ) {
 }
 
 vector<string> check_dir(string add, bool fullpath)
+/* find all files in given directory
+add - what to add to current directory
+fullpath - true to return full path, false for relative path */
 {
     string path = get_dir();
     path += '/';
@@ -38,10 +41,11 @@ vector<string> check_dir(string add, bool fullpath)
     return files;
 }
 
-map<string, string> modelspaths; 
-map<string, string> datapaths;
+map<string, string> modelspaths; //maps models, name : full path
+map<string, string> datapaths; // maps datasets, name : full_path
 
 void config(map<string, string>& models, map<string, string>& data)
+/* Function settomg up modelspaths and datapaths. */
 {
     cout << "Creating config.\n";
     string current_dir = get_dir();
@@ -77,6 +81,7 @@ void config(map<string, string>& models, map<string, string>& data)
 }
 
 void center_text(string s)
+/* Function to center the text in terminal. */
 {
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
@@ -89,6 +94,7 @@ void center_text(string s)
 }
 
 void line_break()
+/* Function printing "-" for the whole width of terminal */
 {
        struct winsize w;
        ioctl(0, TIOCGWINSZ, &w);
@@ -97,17 +103,8 @@ void line_break()
     }
 }
 
-void margin_text(int n, string s)
-{
-    for (int i =0;i<n;i++){
-        cout<<"I";
-    }
-      cout<<"\e[2K";
-      cout<<s<<'\n';
-
-}
-
 void clean()
+/* Function cleaning the terminal */
 {
     printf("\033c");
 }
@@ -117,18 +114,20 @@ void prompt()
     cout << "\n> ";
 }
 
-void make_title(){
+void make_title()
+/* Prints the header of each screen. */
+{
     clean();
     string title = "C++ Neural Network Demonstration";
     cout<<"\e[1m";
     center_text(title);
     line_break();
-    cout<<"\e[0m" << "\n\n\n" <<"\e[1;4m";
-    center_text("Menu:");
-    cout<<"\e[0m";
+    cout<<"\e[0m" << "\n\n\n";
 }
 
-string steer(){
+string steer()
+/* Function to get input for navigation */
+{
     string selection;
     prompt();
     cin >> selection;
@@ -136,6 +135,7 @@ string steer(){
 }
 
 string get_str(string text)
+/* Function getting all string inputs */
 {
     string str;
     cout << text;
@@ -145,6 +145,7 @@ string get_str(string text)
 }
 
 int get_int(string text)
+/* Function getting all int inputs */
 {
     int n;
     cout << text;
@@ -159,6 +160,7 @@ int get_int(string text)
 }
 
 double get_double(string text)
+/* Function getting all double inputs */
 {
     double d;
     cout << text;
@@ -173,7 +175,7 @@ double get_double(string text)
 }
 
 
-//functions placeholders
+/* preview of screens and where they lead */
 
 void main_screen();
     void test_screen();
@@ -183,7 +185,7 @@ void main_screen();
                 void img_test(NeuralNetwork nn, vector<vector<double>> img_set, vector<double> lab_set, int amount);
     
         void test_gates_screen();
-        //finished
+
         void test_custom_screen();
             void test_custom_mnist_screen(NeuralNetwork nn);
                 void test_mnist_screen2(NeuralNetwork nn, vector<vector<double>> img_set, vector<double> lab_set, int amount);
@@ -199,6 +201,7 @@ void main_screen();
             void custom_train_mnist_screen();
                 void custom_train_mnist_screen2(NeuralNetwork nn);
                     void models_saved_screen(int epochs, int amount);
+
         void train_gates_deforcus();
             void train_gates_screen();
                 void train_gates_screen2(NeuralNetwork nn);
@@ -286,12 +289,14 @@ void mnist_train(NeuralNetwork& nn, vector<vector<double>> img_set, vector<doubl
     }
     
     string modelspath = get_str("What should be the name of your model file? It will be saved as /model_{}.txt");
+    while ( in_map(modelspath, modelspaths) ) { modelspath = get_str("This name is taken.\nWhat should be the name of your model file? It will be saved as /model_{}.txt"); }
+
     string new_path = "models/model_" + modelspath + ".txt";
     save_nn(nn, new_path);
     models_saved_screen(epochs, amount);
 }
 
-//main screen
+/* main screen */
 void main_screen()
 {
     make_title();
@@ -311,8 +316,8 @@ void main_screen()
     else { main_screen(); }
 }
 
-// second level screens
 
+/* second level screens */
 void test_screen()
 {
     make_title();
@@ -357,11 +362,11 @@ void train_screen()
     else { train_screen(); }
 }
 
-// third level screens - testing
+/* third level screens - testing */
 void test_mnist_screen()
 {
     make_title();
-    int datasize = 10000;
+    int datasize = 67000;
 
     int start = get_int("Where to start testing?");
     int end = get_int("Where to stop testing?");
@@ -377,13 +382,13 @@ void test_mnist_screen()
         swap(start, end);
     }
 
-    string mnist_path = datapaths["test_images"];
+    string mnist_path = datapaths["full_images"];
     //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + end);
     cout << mnist_path << " succesfuly loaded!\n";
 
-    string labels_path = datapaths["test_labels"];
+    string labels_path = datapaths["full_labels"];
     //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + end);
@@ -442,7 +447,7 @@ void img_test(NeuralNetwork nn, vector<vector<double>> img_set, vector<double> l
     print_img(test_img);
     result(nn.predict(test_img), true);
 
-    cout << "Do you want to save the picture in /images/{}.? [y/n]";
+    cout << "Do you want to save the picture in /images/{}.pmm? [y/n]";
     string selection2 = steer();
     if(selection2 == "y") {
         string filename = get_str("Input the name of your file.");
@@ -521,7 +526,7 @@ void test_custom_mnist_screen(NeuralNetwork nn)
     make_title();
     nn.inf(false);
 
-    int datasize = 10000;
+    int datasize = 67000;
 
     int start = get_int("Where to start testing?");
     int end = get_int("Where to stop testing?");
@@ -537,13 +542,13 @@ void test_custom_mnist_screen(NeuralNetwork nn)
         swap(start, end);
     }
 
-    string mnist_path = datapaths["test_images"];
+    string mnist_path = datapaths["full_images"];
     //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + end);
     cout << mnist_path << " succesfuly loaded!\n";
 
-    string labels_path = datapaths["test_labels"];
+    string labels_path = datapaths["full_labels"];
     //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + end);
@@ -578,8 +583,7 @@ void test_custom_gates_screen(NeuralNetwork nn)
     else { test_custom_gates_screen(nn); }
 }
 
-// third choices - training;
-
+/* third level screens - training */
 void train_mnist_screen()
 {
     make_title();
@@ -636,7 +640,7 @@ void custom_train_mnist_screen2(NeuralNetwork nn)
     nn.inf(false);
     cout << endl;
 
-    int datasize = 10000;
+    int datasize = 67000;
     int amount = get_int("How many images do you want to load?");
     amount = amount % (datasize + 1);
     int start = 0;
@@ -646,13 +650,13 @@ void custom_train_mnist_screen2(NeuralNetwork nn)
         start = start % (datasize);
     }
 
-    string mnist_path = datapaths["test_images"];
+    string mnist_path = datapaths["full_images"];
     //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + amount);
     cout << mnist_path << " succesfuly loaded!\n";
 
-    string labels_path = datapaths["test_labels"];
+    string labels_path = datapaths["full_labels"];
     //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + amount);
@@ -675,7 +679,7 @@ void default_train_mnist_screen()
     NeuralNetwork nn(neurons, rate);
     nn.inf(false);
 
-    int datasize = 10000;
+    int datasize = 67000;
     int amount = get_int("How many images do you want to load?");
     amount = amount % (datasize + 1);
     int start = 0;
@@ -685,13 +689,13 @@ void default_train_mnist_screen()
         start = start % (datasize);
     }
 
-    string mnist_path = datapaths["test_images"];
+    string mnist_path = datapaths["full_images"];
     //string mnist_path = get_str("Drag file or input path to MNIST images.");
     auto images = ReadMNIST(datasize, mnist_path);
     vector<vector<double>> img_set(images.begin() + start, images.begin() + amount);
     cout << mnist_path << " succesfuly loaded!\n";
 
-    string labels_path = datapaths["test_labels"];
+    string labels_path = datapaths["full_labels"];
     //string labels_path = get_str("Drag file or input path to MNIST labels.");
     auto labels = ReadMNIST_labels(datasize, labels_path);
     vector<double> lab_set(labels.begin() + start, labels.begin() + amount);
@@ -849,8 +853,8 @@ void train_gates_screen2(NeuralNetwork nn){
 
 int main(){
     try{
-        config(modelspaths, datapaths);
-        main_screen();
+        config(modelspaths, datapaths); //set the paths on any computer
+        main_screen(); //start the main loop
         return 0;
     }
     catch(exception& e) {
