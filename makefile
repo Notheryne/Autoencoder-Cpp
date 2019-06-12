@@ -5,5 +5,5 @@ all:
 	-lstdc++ -lm -std=c++14
 
 run:
-	main
+	visual
 

@@ -30,7 +30,6 @@ THE SOFTWARE.
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 
 namespace boost{namespace serialization{
     template <class Archive, typename _Scalar, int _Rows, int _Cols, int _Options, int _MaxRows, int _MaxCols>
@@ -112,5 +111,6 @@ namespace boost{namespace serialization{
             split_free(ar,m,version);
         }
 
-}}
+    }
+}
 #endif

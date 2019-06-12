@@ -1,16 +1,10 @@
 #include "helpers/NeuralNetwork.cpp"
 #include "helpers/gates.cpp"
 
-int main(){
+int main() {
 try
-{  
-    NeuralNetwork nn({ 2, 4, 2 }, 0.1);
+{
 
-    nn.load_weights("/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/weights/weights_xor.txt");
-
-    nn.inf(false);
-
-    save_nn(nn, "/home/nothy/Desktop/projekt_cpp/Autoencoder-Cpp/models/model_xor.txt");
 }
 
 catch(exception& e) {

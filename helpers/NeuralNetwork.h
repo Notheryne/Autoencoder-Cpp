@@ -1,6 +1,6 @@
 #include "small_utils.h"
 
-class NeuralNetwork{
+class NeuralNetwork {
 public:
     //constructors (see .cpp)
     NeuralNetwork();
@@ -18,8 +18,8 @@ public:
     vector<MatrixXd> show_errors() { return errors; };
 
     //saving/loading weights to file
-    void save_weights(string);
-    void load_weights(string);
+    //void save_weights(string);
+    //void load_weights(string);
 
     //main functions
     void train(vector<double>, vector<double>);

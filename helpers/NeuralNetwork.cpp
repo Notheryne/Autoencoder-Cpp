@@ -137,12 +137,12 @@ targets - vector of doubles with an expected response to input
         weights[ weights.size() - i ] += (rate * ( ((p2.cwiseProduct(p3)) * p1) ) ); //update weights
     }
 }
-
+/*
 void NeuralNetwork::save_weights(string filepath)
 /*
 Functions to store weights, because training takes time.
 filepath - path to the file to save weights (preferably .txt)
-*/
+*/ /*
 {
     ofstream myfile (filepath);
     if (myfile.is_open())
@@ -164,12 +164,14 @@ filepath - path to the file to save weights (preferably .txt)
 }
 
 void NeuralNetwork::load_weights(string filepath)
+*/
 /*
 Load weights from previously saved file.
 filepath - a path to the file, where weights are stored (preferably .txt)
 
 may be upgraded, because for now it reads each character and stores them into a vector if ',' is found.
 */
+/*
 {
     ifstream myfile (filepath);
     if(myfile.is_open()){
@@ -194,18 +196,20 @@ may be upgraded, because for now it reads each character and stores them into a 
         }
     } else { throw "[load_weights] Unable to open file."; }
 }
-
+*/
+/*
 void NeuralNetwork::mess_weights()
 /*
 A helper function to initialize weights again, just for testing.
 */
+/*
 {
     for(int i = 0; i < neurons.size() - 1; ++i){
     MatrixXd weight = 0.5 * MatrixXd::Random(neurons[i+1], neurons[i]);
     //weights are generated randomly using Eigen::MatrixXd::Random (in range [-0.5, 0.5])  
     weights.push_back(weight);
     }
-}
+} */
 
 double NeuralNetwork::calc_acc(vector<vector<double>> inputs, vector<double> targets)
 {

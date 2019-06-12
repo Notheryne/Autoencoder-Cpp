@@ -190,7 +190,6 @@ void main_screen();
                     void accuracy_test(NeuralNetwork nn, vector<vector<double>> img_set, vector<double> lab_set, int amount);
                     void img_test(NeuralNetwork nn, vector<vector<double>> img_set, vector<double> lab_set, int amount);
             void test_custom_gates_screen(NeuralNetwork nn);
-        //building
 
     void train_screen();
         void train_mnist_screen();
@@ -203,7 +202,7 @@ void main_screen();
         void train_gates_deforcus();
             void train_gates_screen();
                 void train_gates_screen2(NeuralNetwork nn);
-        //building
+
 
 
 
@@ -443,7 +442,7 @@ void img_test(NeuralNetwork nn, vector<vector<double>> img_set, vector<double> l
     print_img(test_img);
     result(nn.predict(test_img), true);
 
-    cout << "Do you want to save the picture in /images? [y/n]";
+    cout << "Do you want to save the picture in /images/{}.? [y/n]";
     string selection2 = steer();
     if(selection2 == "y") {
         string filename = get_str("Input the name of your file.");
@@ -611,7 +610,7 @@ void custom_train_mnist_screen()
     if (biased == "y") { bias = true; }
     else if(biased == "n") { bias = false; }
 
-    int first_layer = get_int("How many neurons should there be on the 1st layer? (must match input size).");
+    int first_layer = get_int("How many neurons should there be on the 1st layer? (must match input size, 784 for mnist).");
     neurons.push_back(first_layer);
 
     for(int i = 1; i < layers - 1; ++i)
@@ -624,7 +623,7 @@ void custom_train_mnist_screen()
         int ith_layer = get_int(question);
         neurons.push_back(ith_layer);
     }
-    int last_layer = get_int("How many neurons should there be on the last layer? (must match output size)");
+    int last_layer = get_int("How many neurons should there be on the last layer? (must match output size, 10 for mnist)");
     neurons.push_back(last_layer);
     NeuralNetwork nn(neurons, learning_rate, bias);
     custom_train_mnist_screen2(nn);
@@ -851,10 +850,7 @@ void train_gates_screen2(NeuralNetwork nn){
 int main(){
     try{
         config(modelspaths, datapaths);
-        //for(auto m : filepaths) { cout << m.first << " : " << m.second << endl; }
-        //print_map(filepaths, 'a');
         main_screen();
-        //custom_train_mnist_screen();
         return 0;
     }
     catch(exception& e) {
